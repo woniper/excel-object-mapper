@@ -1,9 +1,9 @@
 package io.excel.object.mapper;
 
+import io.excel.object.mapper.resource.ExcelResource;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -61,9 +61,4 @@ public class ExcelObjectMapper {
     private Sheet getSheet(String resource, int sheetIndex) throws IOException {
         return excelResource.getResource(resource).getSheetAt(sheetIndex);
     }
-
-    private File getFile(String resource) {
-        return new File(getClass().getClassLoader().getResource(resource).getFile());
-    }
-
 }

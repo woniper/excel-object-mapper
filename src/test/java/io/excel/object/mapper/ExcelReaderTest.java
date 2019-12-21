@@ -1,5 +1,6 @@
 package io.excel.object.mapper;
 
+import io.excel.object.mapper.resource.ResourcesExcelResource;
 import org.junit.Before;
 import org.junit.Test;
 

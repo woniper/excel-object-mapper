@@ -1,4 +1,4 @@
-package io.excel.object.mapper;
+package io.excel.object.mapper.resource;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
