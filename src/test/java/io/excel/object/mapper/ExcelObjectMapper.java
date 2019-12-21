@@ -22,11 +22,19 @@ public class ExcelObjectMapper {
     }
 
     public <T extends AbstractRow> List<T> parse(String resource, Class<T> type) {
+        return this.parse(resource, 0, 0, type);
+    }
+
+    public <T extends AbstractRow> List<T> parse(String resource, int startRowIndex, Class<T> type) {
+        return this.parse(resource, 0, startRowIndex, type);
+    }
+
+    public <T extends AbstractRow> List<T> parse(String resource, int sheetIndex, int startRowIndex, Class<T> type) {
         try {
             List<T> rows = new ArrayList<>();
-            Sheet sheet = getSheet(resource);
+            Sheet sheet = getSheet(resource, sheetIndex);
 
-            for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+            for (int i = startRowIndex; i < sheet.getPhysicalNumberOfRows(); i++) {
                 rows.add(newInstanceRow(type, sheet.getRow(i)));
             }
 
@@ -50,8 +58,8 @@ public class ExcelObjectMapper {
         return type.getConstructor(Row.class).newInstance(row);
     }
 
-    private Sheet getSheet(String resource) throws IOException {
-        return excelResource.getResource(resource).getSheetAt(0);
+    private Sheet getSheet(String resource, int sheetIndex) throws IOException {
+        return excelResource.getResource(resource).getSheetAt(sheetIndex);
     }
 
     private File getFile(String resource) {

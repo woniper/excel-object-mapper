@@ -29,7 +29,7 @@ public class ExcelReaderTest {
         }
 
         // when
-        List<TestRow> testRows = parser.parse("user.xlsx", TestRow.class);
+        List<TestRow> testRows = parser.parse("user.xlsx", 1, TestRow.class);
 
         // then
         assertThat(testRows).hasSize(0);
@@ -38,7 +38,7 @@ public class ExcelReaderTest {
     @Test
     public void user_excel_row를_user로_파싱() {
         // when
-        List<EmployeeRow> employeeRows = parser.parse("user.xlsx", EmployeeRow.class);
+        List<EmployeeRow> employeeRows = parser.parse("user.xlsx", 1, EmployeeRow.class);
 
         // then
         assertThat(employeeRows).hasSize(3);
@@ -50,7 +50,7 @@ public class ExcelReaderTest {
     @Test
     public void company_excel_row를_company로_파싱() {
         // when
-        List<CompanyRow> companies = parser.parse("company.xlsx", CompanyRow.class);
+        List<CompanyRow> companies = parser.parse("company.xlsx", 1, CompanyRow.class);
 
         // then
         assertThat(companies).hasSize(3);
