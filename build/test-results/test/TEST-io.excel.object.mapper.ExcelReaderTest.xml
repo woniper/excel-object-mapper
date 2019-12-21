@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.excel.object.mapper.ExcelReaderTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2019-12-20T22:07:50" hostname="New_HostName" time="0.92">
-  <properties/>
-  <testcase name="user_excel_row를_user로_파싱" classname="io.excel.object.mapper.ExcelReaderTest" time="0.865"/>
-  <testcase name="company_excel_row를_company로_파싱" classname="io.excel.object.mapper.ExcelReaderTest" time="0.055"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

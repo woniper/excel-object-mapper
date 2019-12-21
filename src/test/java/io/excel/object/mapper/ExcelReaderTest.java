@@ -1,5 +1,6 @@
 package io.excel.object.mapper;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,11 +12,35 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ExcelReaderTest {
 
+    private ExcelObjectMapper parser;
+
+    @Before
+    public void setUp() throws Exception {
+         this.parser = new ExcelObjectMapper(new ResourcesExcelResource());
+    }
+
+    @Test
+    public void Row_파라미터를_받는_생성자가_없는_object() {
+        // given
+        class TestRow extends AbstractRow {
+            protected TestRow() {
+                super(null);
+            }
+        }
+
+        // when
+        List<TestRow> testRows = parser.parse("user.xlsx", TestRow.class);
+
+        // then
+        assertThat(testRows).hasSize(0);
+    }
+
     @Test
     public void user_excel_row를_user로_파싱() {
-        ResourceExcelParser parser = new ResourceExcelParser();
+        // when
         List<EmployeeRow> employeeRows = parser.parse("user.xlsx", EmployeeRow.class);
 
+        // then
         assertThat(employeeRows).hasSize(3);
         assertThat(employeeRows.get(0).getName()).isEqualTo("이경원");
         assertThat(employeeRows.get(0).getCompany()).isEqualTo("카페");
@@ -24,9 +49,10 @@ public class ExcelReaderTest {
 
     @Test
     public void company_excel_row를_company로_파싱() {
-        ResourceExcelParser parser = new ResourceExcelParser();
+        // when
         List<CompanyRow> companies = parser.parse("company.xlsx", CompanyRow.class);
 
+        // then
         assertThat(companies).hasSize(3);
         assertThat(companies.get(0).getCompany()).isEqualTo("카페");
         assertThat(companies.get(0).getAddress()).isEqualTo("서울");
