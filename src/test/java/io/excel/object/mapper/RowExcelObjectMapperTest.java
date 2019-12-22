@@ -11,13 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author woniper
  */
-public class ExcelReaderTest {
+public class RowExcelObjectMapperTest {
 
-    private ExcelObjectMapper parser;
+    private RowExcelObjectMapper parser;
 
     @Before
     public void setUp() throws Exception {
-         this.parser = new ExcelObjectMapper(new ResourcesExcelResource());
+         this.parser = new RowExcelObjectMapper(new ResourcesExcelResource());
     }
 
     @Test

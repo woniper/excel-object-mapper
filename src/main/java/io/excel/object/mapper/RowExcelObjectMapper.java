@@ -13,11 +13,11 @@ import java.util.List;
 /**
  * @author woniper
  */
-public class ExcelObjectMapper {
+public class RowExcelObjectMapper {
 
     private final ExcelResource excelResource;
 
-    public ExcelObjectMapper(ExcelResource excelResource) {
+    public RowExcelObjectMapper(ExcelResource excelResource) {
         this.excelResource = excelResource;
     }
 
