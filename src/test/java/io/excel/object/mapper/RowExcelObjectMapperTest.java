@@ -31,7 +31,7 @@ public class RowExcelObjectMapperTest {
     }
 
     @Test
-    public void user_excel_row를_user로_파싱() {
+    public void employee_excel_row를_EmployeeRow로_매핑() {
         // given
         ExcelObjectMapper<EmployeeRow> parser = new RowExcelObjectMapper<>(new ResourcesExcelResource());
 
@@ -46,7 +46,7 @@ public class RowExcelObjectMapperTest {
     }
 
     @Test
-    public void company_excel_row를_company로_파싱() {
+    public void company_excel_row를_CompanyRow로_매핑() {
         // given
         ExcelObjectMapper<CompanyRow> parser = new RowExcelObjectMapper<>(new ResourcesExcelResource());
 
