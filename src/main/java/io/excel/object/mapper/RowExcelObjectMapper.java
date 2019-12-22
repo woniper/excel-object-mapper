@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author woniper
  */
-public class RowExcelObjectMapper {
+public class RowExcelObjectMapper<T extends AbstractRow> implements ExcelObjectMapper<T> {
 
     private final ExcelResource excelResource;
 
@@ -21,15 +21,15 @@ public class RowExcelObjectMapper {
         this.excelResource = excelResource;
     }
 
-    public <T extends AbstractRow> List<T> parse(String resource, Class<T> type) {
+    public List<T> parse(String resource, Class<T> type) {
         return this.parse(resource, 0, 0, type);
     }
 
-    public <T extends AbstractRow> List<T> parse(String resource, int startRowIndex, Class<T> type) {
+    public List<T> parse(String resource, int startRowIndex, Class<T> type) {
         return this.parse(resource, 0, startRowIndex, type);
     }
 
-    public <T extends AbstractRow> List<T> parse(String resource, int sheetIndex, int startRowIndex, Class<T> type) {
+    public List<T> parse(String resource, int sheetIndex, int startRowIndex, Class<T> type) {
         try {
             List<T> rows = new ArrayList<>();
             Sheet sheet = getSheet(resource, sheetIndex);
@@ -54,7 +54,7 @@ public class RowExcelObjectMapper {
         return Collections.emptyList();
     }
 
-    private <T> T newInstanceRow(Class<T> type, Row row) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private T newInstanceRow(Class<T> type, Row row) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return type.getConstructor(Row.class).newInstance(row);
     }
 

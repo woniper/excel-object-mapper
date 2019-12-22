@@ -1,7 +1,6 @@
 package io.excel.object.mapper;
 
 import io.excel.object.mapper.resource.ResourcesExcelResource;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,13 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RowExcelObjectMapperTest {
 
-    private RowExcelObjectMapper parser;
-
-    @Before
-    public void setUp() throws Exception {
-         this.parser = new RowExcelObjectMapper(new ResourcesExcelResource());
-    }
-
     @Test
     public void Row_파라미터를_받는_생성자가_없는_object() {
         // given
@@ -28,6 +20,8 @@ public class RowExcelObjectMapperTest {
                 super(null);
             }
         }
+
+        ExcelObjectMapper<TestRow> parser = new RowExcelObjectMapper<>(new ResourcesExcelResource());
 
         // when
         List<TestRow> testRows = parser.parse("employee.xlsx", 1, TestRow.class);
@@ -38,6 +32,9 @@ public class RowExcelObjectMapperTest {
 
     @Test
     public void user_excel_row를_user로_파싱() {
+        // given
+        ExcelObjectMapper<EmployeeRow> parser = new RowExcelObjectMapper<>(new ResourcesExcelResource());
+
         // when
         List<EmployeeRow> employeeRows = parser.parse("employee.xlsx", 1, EmployeeRow.class);
 
@@ -50,6 +47,9 @@ public class RowExcelObjectMapperTest {
 
     @Test
     public void company_excel_row를_company로_파싱() {
+        // given
+        ExcelObjectMapper<CompanyRow> parser = new RowExcelObjectMapper<>(new ResourcesExcelResource());
+
         // when
         List<CompanyRow> companies = parser.parse("company.xlsx", 1, CompanyRow.class);
 
