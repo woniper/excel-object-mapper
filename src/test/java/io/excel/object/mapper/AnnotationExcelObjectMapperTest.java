@@ -25,6 +25,10 @@ public class AnnotationExcelObjectMapperTest {
         assertThat(employeeRows.get(0).getName()).isEqualTo("이경원");
         assertThat(employeeRows.get(0).getCompany()).isEqualTo("카페");
         assertThat(employeeRows.get(0).getAge()).isEqualTo(20);
+        assertThat(employeeRows.get(0).getShortAge()).isEqualTo((short) 20);
+        assertThat(employeeRows.get(0).getDoubleAge()).isEqualTo(20.0);
+        assertThat(employeeRows.get(0).getFloatAge()).isEqualTo(20.0f);
+        assertThat(employeeRows.get(0).getLongAge()).isEqualTo(20L);
     }
 
     public static class AnnotationEmployeeRow {
@@ -60,6 +64,22 @@ public class AnnotationExcelObjectMapperTest {
 
         public int getAge() {
             return age;
+        }
+
+        public short getShortAge() {
+            return shortAge;
+        }
+
+        public double getDoubleAge() {
+            return doubleAge;
+        }
+
+        public float getFloatAge() {
+            return floatAge;
+        }
+
+        public long getLongAge() {
+            return longAge;
         }
     }
 }
