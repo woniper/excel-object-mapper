@@ -1,10 +1,7 @@
 package io.excel.object.mapper;
 
 import io.excel.object.mapper.resource.ExcelResource;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -39,20 +36,21 @@ public class AnnotationExcelObjectMapper<T> implements ExcelObjectMapper<T> {
     public List<T> parse(String resource, int sheetIndex, int startRowIndex, Class<T> type) {
         try {
             List<T> rows = new ArrayList<>();
-            Sheet sheet = excelResource.getResource(resource).getSheetAt(sheetIndex);
+            try (Workbook workbook = excelResource.getResource(resource)) {
+                Sheet sheet = workbook.getSheetAt(sheetIndex);
 
-            for (int i = startRowIndex; i < sheet.getPhysicalNumberOfRows(); i++) {
-                T object = type.newInstance();
-                Row row = sheet.getRow(i);
+                for (int i = startRowIndex; i < sheet.getPhysicalNumberOfRows(); i++) {
+                    T object = type.newInstance();
+                    Row row = sheet.getRow(i);
 
-                Arrays.stream(object.getClass().getDeclaredFields())
-                        .peek(x -> x.setAccessible(true))
-                        .forEach(x -> setFieldValue(row, object, x));
+                    Arrays.stream(object.getClass().getDeclaredFields())
+                            .peek(x -> x.setAccessible(true))
+                            .forEach(x -> setFieldValue(row, object, x));
 
-                rows.add(object);
+                    rows.add(object);
+                }
+                return rows;
             }
-
-            return rows;
 
         } catch (IOException e) {
             e.printStackTrace();

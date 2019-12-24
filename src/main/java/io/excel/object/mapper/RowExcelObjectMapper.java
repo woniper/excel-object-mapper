@@ -3,6 +3,7 @@ package io.excel.object.mapper;
 import io.excel.object.mapper.resource.ExcelResource;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -30,9 +31,10 @@ public class RowExcelObjectMapper<T extends AbstractRow> implements ExcelObjectM
     }
 
     public List<T> parse(String resource, int sheetIndex, int startRowIndex, Class<T> type) {
-        try {
+        try (Workbook workbook = excelResource.getResource(resource)) {
             List<T> rows = new ArrayList<>();
-            Sheet sheet = getSheet(resource, sheetIndex);
+
+            Sheet sheet = workbook.getSheetAt(sheetIndex);
 
             for (int i = startRowIndex; i < sheet.getPhysicalNumberOfRows(); i++) {
                 rows.add(newInstanceRow(type, sheet.getRow(i)));
@@ -56,9 +58,5 @@ public class RowExcelObjectMapper<T extends AbstractRow> implements ExcelObjectM
 
     private T newInstanceRow(Class<T> type, Row row) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return type.getConstructor(Row.class).newInstance(row);
-    }
-
-    private Sheet getSheet(String resource, int sheetIndex) throws IOException {
-        return excelResource.getResource(resource).getSheetAt(sheetIndex);
     }
 }
