@@ -8,6 +8,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -75,45 +77,62 @@ public class AnnotationExcelObjectMapper<T> implements ExcelObjectMapper<T> {
             throw new IllegalArgumentException(cellIndex.message());
         }
 
+        cell.setCellType(CellType.STRING);
+
+        if (field.getType().equals(RowCell.class)) {
+            Object value = getPrimitiveTypeValue(cell.getStringCellValue(), getRowCellGenericType(field));
+            RowCell<T> rowCell = new RowCell<>(row, cellIndex.index(), value);
+            setValue(field, object, rowCell);
+        } else {
+            Object value = getPrimitiveTypeValue(cell.getStringCellValue(), field.getGenericType());
+            setValue(field, object, value);
+        }
+    }
+
+    private Type getRowCellGenericType(Field field) {
+        return ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+    }
+
+    private void setValue(Field field, T object, Object value) {
         try {
-            cell.setCellType(CellType.STRING);
-            String cellValue = cell.getStringCellValue();
-            String typeName = field.getType().getCanonicalName();
-
-            if (isNumeric(cellValue)) {
-                Number numberValue = Double.valueOf(cellValue);
-                switch (typeName) {
-                    case "int":
-                        field.setInt(object, numberValue.intValue());
-                        break;
-                    case "byte":
-                        field.setByte(object, numberValue.byteValue());
-                        break;
-                    case "short":
-                        field.setShort(object, numberValue.shortValue());
-                        break;
-                    case "double":
-                        field.setDouble(object, numberValue.doubleValue());
-                        break;
-                    case "float":
-                        field.setFloat(object, numberValue.floatValue());
-                        break;
-                    case "long":
-                        field.setLong(object, numberValue.longValue());
-                        break;
-                }
-
-            } else {
-                if (typeName.equals("boolean")) {
-                    field.setBoolean(object, Boolean.parseBoolean(cellValue));
-                } else {
-                    field.set(object, cellValue);
-                }
-            }
+            field.set(object, value);
         } catch (IllegalAccessException e) {
             // todo setValue 실패
             e.printStackTrace();
         }
+    }
+
+    private Object getPrimitiveTypeValue(String value, Type fieldType) {
+        String typeName = fieldType.getTypeName();
+
+        if (isNumeric(value)) {
+            Number numberValue = Double.valueOf(value);
+
+            switch (typeName) {
+                case "int":
+                case "java.lang.Integer":
+                    return numberValue.intValue();
+                case "byte":
+                case "java.lang.Byte":
+                    return numberValue.byteValue();
+                case "short":
+                case "java.lang.Short":
+                    return numberValue.shortValue();
+                case "double":
+                case "java.lang.Double":
+                    return numberValue.doubleValue();
+                case "float":
+                case "java.lang.Float":
+                    return numberValue.floatValue();
+                case "long":
+                case "java.lang.Long":
+                    return numberValue.longValue();
+            }
+        } else if (typeName.equals("java.lang.Boolean") || typeName.equals("boolean")) {
+            return Boolean.parseBoolean(value);
+        }
+
+        return value;
     }
 
     private boolean notAvailableAccessField(Field field) {

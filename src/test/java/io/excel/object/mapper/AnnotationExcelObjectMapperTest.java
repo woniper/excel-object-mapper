@@ -31,6 +31,44 @@ public class AnnotationExcelObjectMapperTest {
         assertThat(employeeRows.get(0).getLongAge()).isEqualTo(20L);
     }
 
+    @Test
+    public void employee_excel_row를_RowCellEmployeeRow로_매핑() {
+        // given
+        ExcelObjectMapper<RowCellEmployeeRow> excelObjectMapper = new AnnotationExcelObjectMapper<>(new ResourcesExcelResource());
+
+        // when
+        List<RowCellEmployeeRow> employeeRows = excelObjectMapper.parse("employee.xlsx", 1, RowCellEmployeeRow.class);
+
+        // then
+        assertThat(employeeRows).hasSize(3);
+        assertThat(employeeRows.get(0).getName().getValue()).isEqualTo("이경원");
+        assertThat(employeeRows.get(0).getCompany().getValue()).isEqualTo("카페");
+        assertThat(employeeRows.get(0).getAge().getValue()).isEqualTo(20);
+    }
+
+    public static class RowCellEmployeeRow {
+        @CellIndex(index = 0)
+        private RowCell<String> name;
+
+        @CellIndex(index = 1)
+        private RowCell<String> company;
+
+        @CellIndex(index = 2)
+        private RowCell<Integer> age;
+
+        public RowCell<String> getName() {
+            return name;
+        }
+
+        public RowCell<String> getCompany() {
+            return company;
+        }
+
+        public RowCell<Integer> getAge() {
+            return age;
+        }
+    }
+
     public static class AnnotationEmployeeRow {
 
         @CellIndex(index = 0)
